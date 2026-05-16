@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CompareTheMotor</title>
+  <meta
+    name="description"
+    content="CompareTheMotor is a completed vehicle comparison system that uses a Flask backend, SQLite database and registration lookup to help everyday buyers compare cars side by side."
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1 class="brand">CompareTheMotor</h1>
+      <p class="tagline">Vehicle comparison for everyday buyers</p>
+    </div>
+    <div class="search-icon" aria-hidden="true">⌕</div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <span class="eyebrow">Final integrated build</span>
+      <h2>Compare two cars clearly, quickly, and confidently</h2>
+      <p>
+        This version runs through a Flask backend and a SQLite database.
+        Users can filter the vehicle catalogue, compare two cars side by side,
+        and use a registration lookup flow that simulates or enriches official
+        vehicle metadata before comparison.
+      </p>
+    </section>
+
+    <section class="controls-card">
+      <div class="lookup-panel">
+        <div class="lookup-copy">
+          <h3>Registration lookup</h3>
+          <p>
+            Enter a registration to test the backend lookup flow. If the
+            registration maps to a known vehicle, you can send it directly into
+            the comparison view.
+          </p>
+        </div>
+
+        <div class="lookup-row">
+          <div class="field">
+            <label for="registrationInput">Vehicle registration</label>
+            <input
+              id="registrationInput"
+              type="text"
+              placeholder="e.g. LA20AAE"
+              maxlength="10"
+            />
+          </div>
+
+          <div class="lookup-actions">
+            <button id="lookupBtn" class="btn btn-primary">Lookup registration</button>
+            <button id="useLookupForABtn" class="btn btn-secondary" disabled>Use as first car</button>
+            <button id="useLookupForBBtn" class="btn btn-secondary" disabled>Use as second car</button>
+          </div>
+        </div>
+
+        <div id="lookupHint" class="helper-strip">
+          Demo registrations: LC20FST, LD20CRS, LE20GLF, LA20AAE, LF20PMA, LB20BMW
+        </div>
+
+        <div id="lookupMessage" class="helper-strip lookup-message">
+          The backend will create the SQLite database automatically the first
+          time you run the server.
+        </div>
+
+        <div id="lookupResult" class="lookup-result hidden"></div>
+      </div>
+
+      <div class="filters-grid">
+        <div class="field">
+          <label for="budgetFilter">Maximum budget</label>
+          <select id="budgetFilter">
+            <option value="999999">No budget limit</option>
+            <option value="12000">Up to £12,000</option>
+            <option value="15000">Up to £15,000</option>
+            <option value="18000">Up to £18,000</option>
+            <option value="22000">Up to £22,000</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="fuelFilter">Fuel type</label>
+          <select id="fuelFilter">
+            <option value="All">All fuel types</option>
+            <option value="Petrol">Petrol</option>
+            <option value="Diesel">Diesel</option>
+            <option value="Hybrid">Hybrid / Plug-in Hybrid</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="buyerType">Buyer priority</label>
+          <select id="buyerType">
+            <option value="balanced">Balanced / everyday use</option>
+            <option value="affordability">Lower running costs</option>
+            <option value="efficiency">Fuel economy and emissions</option>
+            <option value="performance">Performance</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="controls-grid">
+        <div class="field">
+          <label for="carA">Select first car</label>
+          <select id="carA"></select>
+        </div>
+
+        <div class="field">
+          <label for="carB">Select second car</label>
+          <select id="carB"></select>
+        </div>
+      </div>
+
+      <div class="button-row">
+        <button id="compareBtn" class="btn btn-primary">Compare Cars</button>
+        <button id="swapBtn" class="btn btn-secondary">Swap Selection</button>
+        <button id="resetBtn" class="btn btn-secondary">Reset</button>
+      </div>
+
+      <div id="filterSummary" class="helper-strip"></div>
+      <div id="recommendationBanner" class="recommendation hidden"></div>
+    </section>
+
+    <section class="comparison-grid">
+      <article class="comparison-card" id="cardA">
+        <div class="empty-state">
+          <h3>Car A</h3>
+          <p>Select a vehicle to begin comparison.</p>
+        </div>
+      </article>
+
+      <article class="comparison-card" id="cardB">
+        <div class="empty-state">
+          <h3>Car B</h3>
+          <p>Select a second vehicle to compare.</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="bottom-grid">
+      <article class="info-card">
+        <h3>How the comparison works</h3>
+        <p>
+          CompareTheMotor uses a weighted rule-based scoring system on the
+          backend. Lower values are better for price, insurance group and CO₂
+          emissions. Higher values are better for MPG and horsepower. Scores are
+          proportional, so small differences produce small score changes rather
+          than unrealistic jumps.
+        </p>
+        <ul>
+          <li><strong>Affordability</strong> = price + insurance group</li>
+          <li><strong>Efficiency</strong> = MPG + CO₂ emissions</li>
+          <li><strong>Performance</strong> = horsepower</li>
+          <li><strong>Overall</strong> = weighted score based on buyer priority</li>
+        </ul>
+      </article>
+
+      <article class="info-card">
+        <h3>Core implemented feature</h3>
+        <p>
+          A user applies optional filters, selects two cars, and the system loads
+          stored vehicle data from SQLite, applies comparison rules on the Flask
+          backend, and returns a structured side-by-side result with an overall
+          recommendation.
+        </p>
+        <p class="small-note">
+          Note: plug-in hybrid MPG figures are shown as official test-cycle
+          values, which may differ from real-world driving results.
+        </p>
+      </article>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
